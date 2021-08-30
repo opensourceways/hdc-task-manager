@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
 	"time"
 )
@@ -48,7 +49,7 @@ type PrPayload struct {
 	Action       string   //issue status
 	PullRequest  HookPr   `json:"pull_request"`
 	Sender       HookUser //The user information that triggered the hook.
-	Iid          int64   //issue Logo
+	Iid          int64    //issue Logo
 	Number       int64
 	Title        string //issue title
 	Description  string //issue description
@@ -77,4 +78,16 @@ func UpdateGaussOriginPr(gop *GaussOriginPr, fields ...string) error {
 	o := orm.NewOrm()
 	_, err := o.Update(gop, fields...)
 	return err
+}
+
+func QueryGaussOriginPrAll(count, orId int64) (gp []GaussOriginPr) {
+	o := orm.NewOrm()
+	var num int64
+	num, err := o.Raw("select * from hdc_gauss_origin_pr where or_id > ? and status = 1 limit ?", orId, count).QueryRows(&gp)
+	if num > 0 {
+		logs.Info("QueryGaussOriginPrAll, num: ", num)
+	} else {
+		logs.Error("QueryGaussOriginPrAll, err: ", err)
+	}
+	return
 }

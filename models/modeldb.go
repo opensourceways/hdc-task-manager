@@ -222,7 +222,7 @@ type GaussOriginPr struct {
 	RepoUrl      string `orm:"column(repo_url);type(text)" description:"仓库码云地址链接"`
 	Owner        string `orm:"column(owner_repo);size(64)" description:"仓库所在组织"`
 	TargetBranch string `orm:"column(target_branch);size(64)" description:"pr提交的分支"`
-	Status       int8   `orm:"default(0);column(status)" description:"0:正常;1:已删除"`
+	Status       int8   `orm:"default(1);column(status)" description:"1:正常;2:已删除"`
 	CreateTime   string `orm:"size(32);column(create_time);null" description:"issue创建时间"`
 	UpdateTime   string `orm:"size(32);column(update_time);null"`
 	ClosedTime   string `orm:"size(32);column(closed_time);null"`

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
+	"github.com/astaxie/beego/toolbox"
 	"hdc-task-manager/common"
 	"hdc-task-manager/models"
 	"os"
@@ -180,4 +181,43 @@ func CreateHookGaussPrOrgData(hi *models.PrPayload, gop *models.GaussOriginPr, f
 	}
 	logs.Info("gop===>", gop)
 	return updateStr
+}
+
+func AddPrCommentTask(addprcomment string) {
+	addPrCommentsTask := toolbox.NewTask("DealAddPrComments", addprcomment, DealAddPrComments)
+	toolbox.AddTask("DealAddPrComments", addPrCommentsTask)
+}
+
+func DealAddPrComments() error {
+	orId := int64(0)
+	count := int64(50)
+	for {
+		gop := models.QueryGaussOriginPrAll(count, orId)
+		if len(gop) == 0 {
+			break
+		}
+		for _, gp := range gop {
+			orId = gp.OrId
+			if len(gp.PrLabel) > 0 {
+				prLabelList := strings.Split(gp.PrLabel, ",")
+				tmpPrList := make([]string, 0)
+				for _, pr := range prLabelList {
+					if len(pr) > 1 {
+						tmpPrList = append(tmpPrList, pr)
+					}
+				}
+				if len(tmpPrList) > 0 {
+					prLabel := strings.Join(tmpPrList, ",")
+					gp.PrLabel = prLabel
+					models.UpdateGaussOriginPr(&gp, "PrLabel")
+				}
+			}
+			if strings.Contains(gp.PrLabel, "openGauss资料捉虫活动") &&
+				strings.Contains(gp.PrLabel, "hdc-p-challenge") &&
+				!strings.Contains(gp.PrLabel, "challenge-") {
+				AddCommentToPr("/challenge-low", gp.Owner, gp.RepoPath, "030460a0aa92e7121138a82b4eaf1f3a", gp.PrNumber)
+			}
+		}
+	}
+	return nil
 }

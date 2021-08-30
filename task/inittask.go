@@ -70,5 +70,10 @@ func InitTask() bool {
 		specexportwpoint := beego.AppConfig.String("task::specexportwpoint")
 		taskhandler.GetSpecWeekPointsTask(specexportwpoint)
 	}
+	addprcommentflag, errxs := beego.AppConfig.Int("task::addprcommentflag")
+	if addprcommentflag == 1 && errxs == nil {
+		addprcomment := beego.AppConfig.String("task::addprcomment")
+		taskhandler.AddPrCommentTask(addprcomment)
+	}
 	return true
 }
