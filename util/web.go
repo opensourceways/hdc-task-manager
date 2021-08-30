@@ -47,7 +47,7 @@ func HTTPPost(url string, requestBody string) (map[string]interface{}, error) {
 		logs.Error(err, string(body))
 		return nil, err
 	}
-	logs.Info(iss)
+	logs.Info("iss", iss)
 	return iss, nil
 }
 

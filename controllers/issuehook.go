@@ -329,7 +329,7 @@ func (c *GaussHookEventControllers) handleNoteDate() {
 			logs.Error("openeuler-ci-bot, Ignore this comment")
 			return
 		}
-		if cuAccount == "opengauss-bot" && hookNote.Action == "comment" && hookNote.NoteableType == "Issue" {
+		if cuAccount == "opengauss-bot" {
 			logs.Error("opengauss-bot, Ignore this comment")
 			return
 		}
