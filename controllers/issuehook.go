@@ -388,9 +388,6 @@ func (c *GaussHookEventControllers) handlePullReq() {
 		}
 		labelStr = labelStr[:len(labelStr)-1]
 	}
-	if len(labelStr) > 1 {
-		labelStr = strings.ToLower(labelStr)
-	}
 	hdcLabels := beego.AppConfig.String("hdc_gauss_label")
 	if labelStr == "" || !strings.Contains(labelStr, hdcLabels) {
 		logs.Error("Label error, labelStr: ", labelStr, ", hdcLabels: ", hdcLabels)

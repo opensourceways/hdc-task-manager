@@ -766,20 +766,31 @@ func HandleGaussIssueComment(payload models.CommentPayload) {
 			"cuAccount, cBody: ", issueNum, cuAccount, cBody)
 		return
 	}
-	if payload.Issue.State == "closed" || payload.Issue.State == "rejected" ||
-		payload.Issue.State == "已完成" || payload.Issue.State == "已拒绝" {
-		logs.Error("Cannot edit comment, value: ", payload.Issue)
-		return
-	}
+	//if payload.Issue.State == "closed" || payload.Issue.State == "rejected" ||
+	//	payload.Issue.State == "已完成" || payload.Issue.State == "已拒绝" {
+	//	logs.Error("Cannot edit comment, value: ", payload.Issue)
+	//	return
+	//}
 	issueNumber := common.TrimString(payload.Issue.Number)
 	repoPath := common.TrimString(payload.Repository.Path)
 	owner := common.TrimString(payload.Repository.NameSpace)
+	labels := payload.Issue.Labels
 	goi := models.GaussOriginIssue{Owner: owner, RepoPath: repoPath,
 		IssueId: issueId, IssueNumber: issueNumber}
 	eiErr := models.QueryGaussOriginIssue(&goi, "Owner", "RepoPath", "IssueId", "IssueNumber")
 	if goi.OrId == 0 {
 		logs.Error("QueryGaussOriginIssue, Data does not exist, eiErr: ", eiErr)
 		return
+	}
+	if len(labels) > 0 {
+		labelsList := make([]string, len(labels))
+		for _, lab := range labels {
+			labelsList = append(labelsList, lab.Name)
+		}
+		if len(labelsList) > 0 {
+			goi.IssueLabel = strings.Join(labelsList, ",")
+			models.UpdateGaussOriginIssue(&goi, "IssueLabel")
+		}
 	}
 	assignFlag := reviewIsvalid(cuAccount)
 	if !strings.HasPrefix(cBody, GaussLabelCmd) && !assignFlag && cuAccount != goi.IssueAssignee {
@@ -1024,12 +1035,23 @@ func HandleGaussPrComment(payload models.CommentPayload) {
 	}
 	repoPath := common.TrimString(payload.Repository.Path)
 	owner := common.TrimString(payload.Repository.NameSpace)
+	labels := payload.PullRequest.Labels
 	gop := models.GaussOriginPr{Owner: owner, RepoPath: repoPath,
 		PrId: prId, PrNumber: prNumber}
 	eiErr := models.QueryGaussOriginPr(&gop, "Owner", "RepoPath", "PrId", "PrNumber")
 	if gop.OrId == 0 {
 		logs.Error("QueryGaussOriginPr, Data does not exist, eiErr: ", eiErr)
 		return
+	}
+	if len(labels) > 0 {
+		labelsList := make([]string, len(labels))
+		for _, lab := range labels {
+			labelsList = append(labelsList, lab.Name)
+		}
+		if len(labelsList) > 0 {
+			gop.PrLabel = strings.Join(labelsList, ",")
+			models.UpdateGaussOriginPr(&gop, "PrLabel")
+		}
 	}
 	assignFlag := reviewIsvalid(cuAccount)
 	if !strings.HasPrefix(cBody, GaussLabelCmd) && !assignFlag && gop.PrAssignee != cuAccount {
