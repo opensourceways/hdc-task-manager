@@ -215,7 +215,7 @@ func DealAddPrComments() error {
 			if strings.Contains(gp.PrLabel, "openGauss资料捉虫活动") &&
 				strings.Contains(gp.PrLabel, "hdc-p-challenge") &&
 				!strings.Contains(gp.PrLabel, "challenge-") {
-				AddCommentToPr("/challenge-low", gp.Owner, gp.RepoPath, "030460a0aa92e7121138a82b4eaf1f3a", gp.PrNumber)
+				AddCommentToPr("/challenge-low", gp.Owner, gp.RepoPath, "", gp.PrNumber)
 			}
 		}
 	}
