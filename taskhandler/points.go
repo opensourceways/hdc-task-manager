@@ -9,7 +9,6 @@ import (
 	"hdc-task-manager/models"
 	"path/filepath"
 	"strings"
-	"time"
 )
 
 type StatistDate struct {
@@ -44,8 +43,8 @@ func GetMonthPointsTask(exportMPoint string) {
 // Deal with integration tasks
 func DealWeekPointStart() error {
 	// 1. Calculate openEuler points
-	CalculateOpenEulerPoint(1)
-	time.Sleep(time.Second * 120)
+	//CalculateOpenEulerPoint(1)
+	//time.Sleep(time.Second * 120)
 	//2. Calculate openGauss points
 	CalculateOpenGaussPoint(1)
 	return nil
@@ -60,8 +59,8 @@ func DealSpecWeekPointStart() error {
 // Deal with integration tasks
 func DealMonthPointStart() error {
 	// 1. Calculate openEuler points
-	CalculateOpenEulerPoint(2)
-	time.Sleep(time.Second * 120)
+	//CalculateOpenEulerPoint(2)
+	//time.Sleep(time.Second * 120)
 	//2. Calculate openGauss points
 	CalculateOpenGaussPoint(2)
 	return nil

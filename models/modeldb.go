@@ -233,7 +233,7 @@ type GaussOriginPr struct {
 type EmailList struct {
 	Id        int64  `orm:"pk;auto"`
 	EmailName string `orm:"size(512);column(email_name);null" description:"收件人名称"`
-	EmailType int8   `orm:"column(email_type);default(1)" description:"1:openEuler;2:openGauss;3:都发"`
+	EmailType int8   `orm:"column(email_type);default(1)" description:"1:openEuler;2:openGauss;3:都发;4:都不发"`
 	SendType  int8   `orm:"column(send_type);default(1)" description:"1:收件人;2:抄送人"`
 }
 

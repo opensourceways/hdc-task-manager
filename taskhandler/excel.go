@@ -202,11 +202,6 @@ func DelFile(fileList []string) {
 
 func SendEmail(attchStr string, flag int, cBody, subject string) error {
 	//var mail Mail
-	//emailName := beego.AppConfig.String("email::email_name")
-	//emailPwd := beego.AppConfig.String("email::email_pwd")
-	//emailHost := beego.AppConfig.String("email::email_host")
-	//emailPort := beego.AppConfig.String("email::email_port")
-	//emailPwd = ""
 	SendTypeStr := ""
 	if flag == 1 {
 		SendTypeStr = beego.AppConfig.String("email::openeuler_send_type")
